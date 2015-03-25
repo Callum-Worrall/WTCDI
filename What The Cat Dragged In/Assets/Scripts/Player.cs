@@ -25,6 +25,12 @@ public class Player : MonoBehaviour
 	public bool sprinting = false;
 	float sprintingTimer;
 	
+	// Attack Variables //
+	public bool attacking = false;
+	float attackTimer = 0.0f;
+	public float attackSwingTimer = 1.0f;
+	public float attackDistance = 1.5f;
+	
 	// Jumping Variables //
 	public float jumpHeight = 2.0f;
 	public float maxJumpHeight = 2.0f;
@@ -46,40 +52,40 @@ public class Player : MonoBehaviour
 	// Initialization //
 	void Start ()
 	{
-
+		
 	}
 	
 	// Update //
 	void Update ()
 	{
 		timer += Time.deltaTime;
-	
-
+		
+		
 		InputManager();
 	}
-
+	
 	void InputManager()
 	{
 		Movement();
 		Sprint();
 		Jump();
+		Attack();
 	}
-
+	
 	// Movement //
 	void Movement()
 	{
 		//if(Input.GetButtonDown("Horizontal"))
 		//{
-			if(Input.GetAxis("Horizontal") < 0)
-			{
-				transform.position -= speed * Time.deltaTime;
-			}
+		if(Input.GetAxis("Horizontal") < 0)
+		{
+			transform.position -= speed * Time.deltaTime;
+		}
 		else if(Input.GetAxis("Horizontal") > 0)
-				transform.position += speed * Time.deltaTime;
+			transform.position += speed * Time.deltaTime;
 		//}
 	}
-
-
+	
 	// Sprint //
 	void Sprint()
 	{
@@ -100,6 +106,46 @@ public class Player : MonoBehaviour
 		if (sprintingTimer > sprintTime && grounded == true)
 		{
 			sprinting = false;
+		}
+	}
+	
+	// Break Object //
+	void Attack()
+	{
+		if (Input.GetButtonDown("Swipe") && attacking == false)
+		{
+			attacking = true;
+		}
+		
+		//if (attacking == true)
+		//{
+		//	attackTimer += Time.deltaTime;
+		//}
+		
+		//if(attacking == true && attackTimer > attackSwingTimer)
+		//{
+		//	attacking = false;
+		//	
+		//	attackTimer = 0;
+		//}
+		
+		if(attacking == true)
+		{
+			GameObject[] enemies = UnityEngine.Object.FindObjectsOfType<GameObject>();
+			
+			for (int i = 0; i < enemies.Length; i++)
+			{
+				if (enemies[i].CompareTag("Enemy") == true)
+				{
+					if(enemies[i].transform.position.x < (transform.position.x + attackDistance) &&
+					   enemies[i].transform.position.x > (transform.position.x))
+					{
+						Debug.Log("Destroyed the " + enemies[i].name + "!");
+						Destroy(enemies[i]);
+					}
+				}
+			}
+			attacking = false;
 		}
 	}
 	
@@ -144,7 +190,7 @@ public class Player : MonoBehaviour
 				gravity.y);
 			
 			transform.position = new Vector3(transform.position.x, newPosition, transform.position.z);
-
+			
 		}
 		
 		//Player land
@@ -161,8 +207,8 @@ public class Player : MonoBehaviour
 	{
 		return sprinting;
 	}
-
-	void AdjustCurrentHealth(int health)
+	
+	public void AdjustCurrentHealth(int health)
 	{
 		currentHealth += health;
 	}
