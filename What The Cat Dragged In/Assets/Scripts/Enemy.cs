@@ -110,6 +110,8 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
-
-
+	public void AdjustCurrentHealth(int health)
+	{
+		m_currentHealth += health;
+	}
 }

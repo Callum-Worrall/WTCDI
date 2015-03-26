@@ -27,14 +27,28 @@ public class AttackBox : MonoBehaviour
 	{
 		if(m_collided == false)
 		{
-			if(a_other.collider.name == "Cat")
+
+			//For Enemy
+			if(transform.parent.tag == "Enemy")
 			{
-				GameObject player = (GameObject)a_other.gameObject;
-				player.GetComponent<Player>().AdjustCurrentHealth(-1);
-				m_collided = true;
+				if(a_other.collider.name == "Cat")
+				{
+					GameObject player = (GameObject)a_other.gameObject;
+					player.GetComponent<Player>().AdjustCurrentHealth(-1);
+					m_collided = true;
+				}
 			}
 
+			//For Player
+			if(transform.parent.tag == "Player")
+			{
+				if(a_other.collider.tag == "Enemy")
+				{
+					GameObject enemy = (GameObject)a_other.gameObject;
+					enemy.GetComponent<Enemy>().AdjustCurrentHealth(-3);
+					m_collided = true;
+				}
+			}
 		}
-
 	}
 }

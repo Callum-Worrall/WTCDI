@@ -11,14 +11,14 @@ public class Player : MonoBehaviour
 	float timer = 0f;
 	
 	// Player Stats //
-	public int currentHealth = 10;
-	public int maxHealth = 10;
+	public int m_currentHealth = 10;
+	public int m_maxHealth = 10;
 	
 	// Speed Settings //
-	public Vector3 speed;
-	public Vector3 sprintSpeed;
-	public Vector3 jumpSpeed;
-	public Vector3 gravity;
+	public Vector3 m_speed;
+	public Vector3 m_sprintSpeed;
+	public Vector3 m_jumpSpeed;
+	public Vector3 m_gravity;
 	
 	// Sprinting Variables //
 	public float sprintTime = 1.0f;
@@ -34,6 +34,10 @@ public class Player : MonoBehaviour
 	// Jumping Variables //
 	public float jumpHeight = 2.0f;
 	public float maxJumpHeight = 2.0f;
+
+	float currentJumpHeight = 0.0f;
+	float currentMaxJumpHeight = 0.0f;
+
 	float maxJumpSpeed;
 	public bool grounded = true;
 	public bool reachedApex;
@@ -42,6 +46,9 @@ public class Player : MonoBehaviour
 	public float jumpCounter;
 	
 	public List<GameObject> Children;
+
+	//Prefab for the AttackBox
+	public GameObject m_attack; 
 	
 	
 	#endregion
@@ -79,10 +86,10 @@ public class Player : MonoBehaviour
 		//{
 		if(Input.GetAxis("Horizontal") < 0)
 		{
-			transform.position -= speed * Time.deltaTime;
+			transform.position -= m_speed * Time.deltaTime;
 		}
 		else if(Input.GetAxis("Horizontal") > 0)
-			transform.position += speed * Time.deltaTime;
+			transform.position += m_speed * Time.deltaTime;
 		//}
 	}
 	
@@ -131,20 +138,25 @@ public class Player : MonoBehaviour
 		
 		if(attacking == true)
 		{
-			GameObject[] enemies = UnityEngine.Object.FindObjectsOfType<GameObject>();
-			
-			for (int i = 0; i < enemies.Length; i++)
-			{
-				if (enemies[i].CompareTag("Enemy") == true)
-				{
-					if(enemies[i].transform.position.x < (transform.position.x + attackDistance) &&
-					   enemies[i].transform.position.x > (transform.position.x))
-					{
-						Debug.Log("Destroyed the " + enemies[i].name + "!");
-						Destroy(enemies[i]);
-					}
-				}
-			}
+			// create the attackbox
+			GameObject attack = (GameObject)Instantiate(m_attack, transform.position + new Vector3(2.0f, 0.0f, 0.0f), transform.rotation);
+			attack.transform.parent = transform;
+
+			//GameObject[] enemies = UnityEngine.Object.FindObjectsOfType<GameObject>();
+			//
+			//for (int i = 0; i < enemies.Length; i++)
+			//{
+			//	if (enemies[i].CompareTag("Enemy") == true)
+			//	{
+			//		if(enemies[i].transform.position.x < (transform.position.x + attackDistance) &&
+			//		   enemies[i].transform.position.x > (transform.position.x))
+			//		{
+			//			Debug.Log("Destroyed the " + enemies[i].name + "!");
+			//			enemies[i].GetComponent<Enemy>().AdjustCurrentHealth(-2);
+			//		}
+			//	}
+			//}
+			//attacking = false;
 			attacking = false;
 		}
 	}
@@ -157,6 +169,8 @@ public class Player : MonoBehaviour
 		{
 			grounded = false;
 			jumpVelocity = 0.0f;
+			currentJumpHeight = transform.position.y + jumpHeight;
+			currentMaxJumpHeight = transform.position.y + maxJumpHeight;
 		}
 		
 		//Check if apex is reached and not on the ground, if true continue to jump
@@ -164,16 +178,16 @@ public class Player : MonoBehaviour
 		{
 			float newPosition = Mathf.SmoothDamp(
 				transform.position.y,
-				jumpHeight, 
+				currentJumpHeight, 
 				ref jumpVelocity, 
 				1.0f * Time.deltaTime, 
-				jumpSpeed.y);
+				m_jumpSpeed.y);
 			
 			transform.position = new Vector3(transform.position.x, newPosition, transform.position.z);
 		}
 		
 		//Check if jump height is reached
-		if (transform.position.y >= maxJumpHeight)
+		if (transform.position.y >= currentMaxJumpHeight)
 		{
 			reachedApex = true;
 			jumpVelocity = 0.0f;
@@ -187,7 +201,7 @@ public class Player : MonoBehaviour
 				0.0f,
 				ref jumpVelocity,
 				1.0f * Time.deltaTime, 
-				gravity.y);
+				m_gravity.y);
 			
 			transform.position = new Vector3(transform.position.x, newPosition, transform.position.z);
 			
@@ -210,6 +224,6 @@ public class Player : MonoBehaviour
 	
 	public void AdjustCurrentHealth(int health)
 	{
-		currentHealth += health;
+		m_currentHealth += health;
 	}
 }

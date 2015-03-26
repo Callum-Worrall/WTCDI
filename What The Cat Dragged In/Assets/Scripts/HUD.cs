@@ -21,8 +21,8 @@ public class HUD : MonoBehaviour
 		//Stamina Bar
 		GameObject player = GameObject.Find("Cat");
 		
-		int currentHealth = player.GetComponent<Player>().currentHealth;
-		int maxHealth = player.GetComponent<Player>().maxHealth;
+		int currentHealth = player.GetComponent<Player>().m_currentHealth;
+		int maxHealth = player.GetComponent<Player>().m_maxHealth;
 		
 		if (currentHealth > 0)
 		{
