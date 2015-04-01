@@ -37,7 +37,7 @@ public class Drag : MonoBehaviour
 
 	void PickUp()
 	{
-		GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Corpse");
+		GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Stunned");
 
 		for (int i = 0; i < Corpse.Length; i++)
 		{
@@ -46,9 +46,9 @@ public class Drag : MonoBehaviour
 			{
 				//Corpse[i].transform.position = new Vector3 (0, 0, 0);
 
+				Corpse[i].transform.tag = "PickedUp";
+
 				Corpse[i].transform.parent = transform;
-
-
 
 				pickedUp = true;
 			}

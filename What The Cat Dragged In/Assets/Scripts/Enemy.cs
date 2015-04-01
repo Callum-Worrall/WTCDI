@@ -65,6 +65,10 @@ public class Enemy : MonoBehaviour
 			Material matColor = renderer.material;
 			matColor.color = new Color(1,0,0);
 			renderer.material = matColor;
+			if (!transform.CompareTag("Corpse"))
+			{
+				transform.tag = "Corpse";
+			}
 		}
 		else if(m_currentHealth <= 10 * m_maxHealth / 100) // If below a certain percentage the enemy will be stunned
 		{
@@ -72,6 +76,10 @@ public class Enemy : MonoBehaviour
 			Material matColor = renderer.material;
 			matColor.color = new Color(0,1,1);
 			renderer.material = matColor;
+			if (!transform.CompareTag("Stunned"))
+			{
+				transform.tag = "Stunned";
+			}
 		}
 
 		if(m_states == Condition.ACTIVE)
@@ -80,8 +88,11 @@ public class Enemy : MonoBehaviour
 			matColor.color = new Color(1,1,1);
 			renderer.material = matColor;
 			Follow(m_player);
+			if (!transform.CompareTag("Enemy"))
+			{
+				transform.tag = "Enemy";
+			}
 		}
-
 	}
 	
 	void Attack()

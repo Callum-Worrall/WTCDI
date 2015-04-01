@@ -124,39 +124,11 @@ public class Player : MonoBehaviour
 			attacking = true;
 		}
 		
-		//if (attacking == true)
-		//{
-		//	attackTimer += Time.deltaTime;
-		//}
-		
-		//if(attacking == true && attackTimer > attackSwingTimer)
-		//{
-		//	attacking = false;
-		//	
-		//	attackTimer = 0;
-		//}
-		
 		if(attacking == true)
 		{
 			// create the attackbox
 			GameObject attack = (GameObject)Instantiate(m_attack, transform.position + new Vector3(2.0f, 0.0f, 0.0f), transform.rotation);
 			attack.transform.parent = transform;
-
-			//GameObject[] enemies = UnityEngine.Object.FindObjectsOfType<GameObject>();
-			//
-			//for (int i = 0; i < enemies.Length; i++)
-			//{
-			//	if (enemies[i].CompareTag("Enemy") == true)
-			//	{
-			//		if(enemies[i].transform.position.x < (transform.position.x + attackDistance) &&
-			//		   enemies[i].transform.position.x > (transform.position.x))
-			//		{
-			//			Debug.Log("Destroyed the " + enemies[i].name + "!");
-			//			enemies[i].GetComponent<Enemy>().AdjustCurrentHealth(-2);
-			//		}
-			//	}
-			//}
-			//attacking = false;
 			attacking = false;
 		}
 	}
