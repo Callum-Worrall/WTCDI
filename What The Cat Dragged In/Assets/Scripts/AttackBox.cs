@@ -27,7 +27,6 @@ public class AttackBox : MonoBehaviour
 	{
 		if(m_collided == false)
 		{
-
 			//For Enemy
 			if(transform.parent.tag == "Enemy")
 			{

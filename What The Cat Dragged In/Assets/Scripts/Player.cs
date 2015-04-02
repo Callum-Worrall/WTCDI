@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
 	
 	// Attack Variables //
 	public bool attacking = false;
+	public bool attacked = false;
 	float attackTimer = 0.0f;
 	public float attackSwingTimer = 1.0f;
 	public float attackDistance = 1.5f;
@@ -122,13 +123,25 @@ public class Player : MonoBehaviour
 		if (Input.GetButtonDown("Swipe") && attacking == false)
 		{
 			attacking = true;
+			attackTimer = 0.0f;
+			attacked = false;
+		}
+
+		if(attacking == true)
+		{
+			attackTimer += 0.1f * Time.deltaTime;
 		}
 		
-		if(attacking == true)
+		if(attacking == true && attacked == false && attackTimer >= attackSwingTimer/2)
 		{
 			// create the attackbox
 			GameObject attack = (GameObject)Instantiate(m_attack, transform.position + new Vector3(2.0f, 0.0f, 0.0f), transform.rotation);
 			attack.transform.parent = transform;
+			attacked = true;
+		}
+
+		if (attacking == true && attackTimer >= attackSwingTimer)
+		{
 			attacking = false;
 		}
 	}
