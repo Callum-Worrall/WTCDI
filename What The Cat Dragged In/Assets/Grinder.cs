@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Grinder : MonoBehaviour {
+public class Grinder : MonoBehaviour
+{
 
 	public bool filled = false;
 	public int corpseCount = 1;
@@ -29,7 +30,7 @@ public class Grinder : MonoBehaviour {
 		return false;
 	}
 
-	void OnTriggerEnter(Collider other)
+	void OnTriggerStay(Collider other)
 	{
 		if (other.gameObject.CompareTag("Stunned") && filled == false)
 		{

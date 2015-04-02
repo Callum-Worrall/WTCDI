@@ -8,17 +8,18 @@ enum Facing
 	RIGHT = 1
 };
 
-enum Condition
+public enum Condition
 {
 	ACTIVE,
 	STUNNED,
-	DEAD
+	DEAD,
+	PICKEDUP
 };
 
 public class Enemy : MonoBehaviour 
 {
 	Facing m_facing; // which way the enemy is facing
-	Condition m_states; // is enemy alive or dead, etc
+	public Condition m_states; // is enemy alive or dead, etc
 	GameObject m_player; // the enemy knows the player object
 	public float m_speed; // hows fast it moves
 	public GameObject m_attack; // the prefab for the AttackBox
@@ -59,7 +60,14 @@ public class Enemy : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if(m_currentHealth <= 0)
+		if (transform.parent != null)
+		{
+			m_states = Condition.PICKEDUP;
+			transform.tag = "PickedUp";
+		}
+
+
+		if(m_currentHealth <= 0 && transform.parent == null)
 		{
 			m_states = Condition.DEAD;
 			Material matColor = renderer.material;
@@ -70,7 +78,7 @@ public class Enemy : MonoBehaviour
 				transform.tag = "Corpse";
 			}
 		}
-		else if(m_currentHealth <= 10 * m_maxHealth / 100) // If below a certain percentage the enemy will be stunned
+		else if(m_currentHealth <= 10 * m_maxHealth / 100 && transform.parent == null) // If below a certain percentage the enemy will be stunned
 		{
 			m_states = Condition.STUNNED;
 			Material matColor = renderer.material;
@@ -82,7 +90,7 @@ public class Enemy : MonoBehaviour
 			}
 		}
 
-		if(m_states == Condition.ACTIVE)
+		if(m_states == Condition.ACTIVE && transform.parent == null)
 		{
 			Material matColor = renderer.material;
 			matColor.color = new Color(1,1,1);
@@ -124,5 +132,53 @@ public class Enemy : MonoBehaviour
 	public void AdjustCurrentHealth(int health)
 	{
 		m_currentHealth += health;
+	}
+
+	public int GetCondition()
+	{
+		if (m_states == Condition.ACTIVE)
+		{
+			return 1;
+		}
+
+		if (m_states == Condition.STUNNED)
+		{
+			return 0;
+		}
+
+		if (m_states == Condition.DEAD)
+		{
+			return -1;
+		}
+
+		if (m_states == Condition.PICKEDUP)
+		{
+			return -2;
+		}
+
+		return -1;
+	}
+
+	public void SetCondition(int state)
+	{
+		if (state == 1)
+		{
+			m_states = Condition.ACTIVE;
+		}
+		
+		if (state == 0)
+		{
+			m_states = Condition.STUNNED;
+		}
+		
+		if (state == -1)
+		{
+			m_states = Condition.DEAD;
+		}
+
+		if (state == -2)
+		{
+			m_states = Condition.PICKEDUP;
+		}
 	}
 }

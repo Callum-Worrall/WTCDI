@@ -46,6 +46,8 @@ public class Drag : MonoBehaviour
 			{
 				//Corpse[i].transform.position = new Vector3 (0, 0, 0);
 
+				//Corpse[i].GetComponent<Enemy>().SetCondition(-2);
+
 				Corpse[i].transform.tag = "PickedUp";
 
 				Corpse[i].transform.parent = transform;
@@ -58,6 +60,8 @@ public class Drag : MonoBehaviour
 	void Drop()
 	{
 		//transform.GetChild() = 
+
+		transform.GetChild(0).GetComponent<Enemy>().SetCondition(0);
 
 		transform.GetChild(0).parent = null;
 		
